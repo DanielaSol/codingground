@@ -1,0 +1,193 @@
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. TP.
+        
+        ENVIRONMENT DIVISION.
+        CONFIGURATION SECTION.
+        SPECIAL-NAMES.
+        DECIMAL-POINT IS COMMA.
+        
+        INPUT-OUTPUT SECTION.
+        FILE-CONTROL.
+            SELECT NOV-TIMES ASSIGN TO DISK
+                               ORGANIZATION IS LINE SEQUENTIAL
+                              FILE STATUS IS NOV-TIMES-ESTADO.
+        
+            SELECT NOV-TIMES1     ASSIGN TO DISK
+                               ORGANIZATION IS LINE SEQUENTIAL
+                                   FILE STATUS IS NOV-TIMES1-ESTADO.
+        
+            SELECT NOV-TIMES2     ASSIGN TO DISK
+                                   ORGANIZATION IS LINE SEQUENTIAL
+                                   FILE STATUS IS NOV-TIMES2-ESTADO.
+        
+            SELECT NOV-TIMES3     ASSIGN TO DISK
+                                   ORGANIZATION IS LINE SEQUENTIAL
+                                   FILE STATUS IS NOV-TIMES3-ESTADO.
+                                   
+            SELECT PROFESORES    ASSIGN TO DISK
+                                ORGANIZATION IS LINE SEQUENTIAL
+                                FILE STATUS IS PROF-ESTADO.
+        
+            SELECT LISTADO-ESTADO ASSIGN TO PRINTER "Listado.dat".
+        
+        DATA DIVISION.
+       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+        FILE SECTION.
+       *-----------------------
+        
+        FD LISTADO-ESTADO     LABEL RECORD OMITTED.
+        01 LINEA-LISTADO PIC X(87).
+        
+        FD NOV-TIMES     LABEL RECORD IS STANDARD
+                         VALUE OF FILE-ID IS "NovTimes.dat".
+        01 REG-NOV-TIMES.
+            03 NOV-TIMES-NUMERO    PIC X(5).
+            03 NOV-TIMES-FECHA.
+                05 NOV-TIMES-ANIO    PIC 9(4).
+                05 NOV-TIMES-MES    PIC 9(2).
+                05 NOV-TIMES-DIA    PIC 9(2).
+            03 NOV-TIMES-SUCURSAL    PIC X(3).
+            03 NOV-TIMES-TIPO-CLASE        PIC X(4).
+            03 NOV-TIMES-HORAS        PIC 9(2)V99.
+             
+        FD NOV-TIMES1     LABEL RECORD IS STANDARD
+                         VALUE OF FILE-ID IS "NovTimes1.dat".
+        01 REG-NOV-TIMES1.
+            03 NOV-TIMES1-NUMERO    PIC X(5).
+            03 NOV-TIMES1-FECHA.
+                05 NOV-TIMES1-ANIO    PIC 9(4).
+                05 NOV-TIMES1-MES    PIC 9(2).
+                05 NOV-TIMES1-DIA    PIC 9(2).
+            03 NOV-TIMES1-SUCURSAL    PIC X(3).
+            03 NOV-TIMES1-TIPO-CLASE        PIC X(4).
+            03 NOV-TIMES1-HORAS        PIC 9(2)V99.
+                
+        FD NOV-TIMES2     LABEL RECORD IS STANDARD
+                          VALUE OF FILE-ID IS "NovTimes2.dat".
+        01 REG-NOV-TIMES2.
+            03 NOV-TIMES2-NUMERO    PIC X(5).
+            03 NOV-TIMES2-FECHA.
+                05 NOV-TIMES2-ANIO    PIC 9(4).
+                05 NOV-TIMES2-MES    PIC 9(2).
+                05 NOV-TIMES2-DIA    PIC 9(2).
+            03 NOV-TIMES2-SUCURSAL    PIC X(3).
+            03 NOV-TIMES2-TIPO-CLASE        PIC X(4).
+            03 NOV-TIMES2-HORAS        PIC 9(2)V99.
+                
+        FD NOV-TIMES3     LABEL RECORD IS STANDARD
+                        VALUE OF FILE-ID IS "NovTimes3.dat".
+        01 REG-NOV-TIMES3.
+            03 NOV-TIMES3-NUMERO    PIC X(5).
+            03 NOV-TIMES3-FECHA.
+                05 NOV-TIMES3-ANIO    PIC 9(4).
+                05 NOV-TIMES3-MES    PIC 9(2).
+                05 NOV-TIMES3-DIA    PIC 9(2).
+            03 NOV-TIMES3-SUCURSAL    PIC X(3).
+            03 NOV-TIMES3-TIPO-CLASE        PIC X(4).
+            03 NOV-TIMES3-HORAS        PIC 9(2)V99.    
+        
+        WORKING-STORAGE SECTION.
+        
+        77 NOV-TIMES-ESTADO PIC XX.
+        77 NOV-TIMES1-ESTADO PIC XX.
+        77 NOV-TIMES2-ESTADO PIC XX.
+        77 NOV-TIMES3-ESTADO PIC XX.
+        77 PROF-ESTADO PIC XX.
+        
+        
+        
+        77 EOF-NOVTIMES1 PIC XX VALUE "NO".
+            88 EOF-NOV-TIMES1 VALUE "SI".
+        77 EOF-NOVTIMES2 PIC XX VALUE "NO".
+            88 EOF-NOV-TIMES2 VALUE "SI".
+        77 EOF-NOVTIMES3 PIC XX VALUE "NO".
+            88 EOF-NOV-TIMES3 VALUE "SI".
+            
+            
+            
+            
+            
+        01 CLAVE-NOV-TIMES1.
+            03 CLAVE-NOV-TIMES1-NUMERO     PIC 9(5).
+            03 CLAVE-NOV-TIMES1-FECHA    PIC 9(8).
+        01 CLAVE-NOV-TIMES2.
+            03 CLAVE-NOV-TIMES2-NUMERO     PIC 9(5).
+            03 CLAVE-NOV-TIMES2-FECHA    PIC 9(8).
+        01 CLAVE-NOV-TIMES3.
+            03 CLAVE-NOV-TIMES3-NUMERO     PIC 9(5).
+            03 CLAVE-NOV-TIMES3-FECHA    PIC 9(8).
+        01 MENOR-CLAVE.
+            03 MENOR-CLAVE-NUMERO     PIC 9(5).
+            03 MENOR-CLAVE-FECHA    PIC 9(8).
+      
+          
+        PROCEDURE DIVISION.
+       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+       * COMIENZO.
+        
+        PERFORM INICIO.
+       * PERFORM CARGAR-TABLAS.
+       * PERFORM CARGAR-DATOS.
+       * PERFORM PRINT-TABLE.
+        PERFORM FIN.
+        
+        STOP RUN.
+        
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        INICIO.
+            OPEN INPUT NOV-TIMES.
+            OPEN INPUT NOV-TIMES1.
+            OPEN INPUT NOV-TIMES2.
+            OPEN INPUT NOV-TIMES3.
+            OPEN OUTPUT LISTADO-ESTADO.
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        FIN.
+        CLOSE NOV-TIMES.
+        CLOSE NOV-TIMES1.
+        CLOSE NOV-TIMES2.
+        CLOSE NOV-TIMES3.
+        CLOSE LISTADO-ESTADO.
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        LEER-NOV-TIMES1.
+        READ NOV-TIMES1
+            AT END MOVE "SI" TO EOF-NOVTIMES1.
+        MOVE NOV-TIMES1-FECHA TO CLAVE-NOV-TIMES1-FECHA.
+        MOVE NOV-TIMES1-NUMERO TO CLAVE-NOV-TIMES1-NUMERO.
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        LEER-NOV-TIMES2.
+        READ NOV-TIMES2
+            AT END MOVE "SI" TO EOF-NOVTIMES2.
+        MOVE NOV-TIMES2-NUMERO TO CLAVE-NOV-TIMES2-NUMERO.
+        MOVE NOV-TIMES2-FECHA TO CLAVE-NOV-TIMES2-FECHA.
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        LEER-NOV-TIMES3.
+        READ NOV-TIMES3
+            AT END MOVE "SI" TO EOF-NOVTIMES3.
+        MOVE NOV-TIMES3-NUMERO TO CLAVE-NOV-TIMES3-NUMERO.
+        MOVE NOV-TIMES3-FECHA TO CLAVE-NOV-TIMES3-FECHA.
+        
+        
+        
+        
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        LEER-PROFESORES.
+        READ PROFESORES AT END MOVE "SI" TO EOF-PROF.
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        LEER-SUCURSALES.
+        READ SUCURSALES AT END MOVE "SI" TO EOF-SUC.
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        LEER-TIPOS_CLASES.
+        READ TIPOS_CLASES AT END MOVE "SI" TO EOF-CLA.
+       *-----------------------------------------------------------*
+       *-----------------------------------------------------------*
+        
+        
+        END PROGRAM TP.
