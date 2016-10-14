@@ -156,6 +156,7 @@
         01 HORAS-PROFESOR PIC 9(2)V99.
         01 HORAS-FECHA PIC 9(2)V99.
         01 PROFESOR-ANTERIOR PIC X(5) VALUE '     '.
+        01 FECHA-ANTERIOR PIC 9(8) VALUE 00000000.
         01 IMPORTE PIC 9(7)V99.
         01 IMPORTE-TOTAL PIC 9(7)V99 VALUE 0.
         01  WS-CURRENT-DATE-FIELDS.
@@ -199,7 +200,9 @@
         PERFORM 0700-LEER-TIPOS_CLASE.
         PERFORM 0800-CARGAR-TABLAS.
         MOVE 0 TO HORAS-TOTALES.
-        PERFORM FIN.        
+        PERFORM 1100-PROCESAR-ARCHIVOS UNTIL EOF-NOV-TIMES1
+        AND EOF-NOV-TIMES2 AND EOF-NOV-TIMES3.
+        PERFORM 1800-FIN.        
         STOP RUN.
         
       *----------    PERFORM INICIO      -------------------------*
@@ -219,8 +222,8 @@
         0200-LEER-NOV-TIMES1.
          READ NOV-TIMES1
             AT END MOVE "SI" TO EOF-NOVTIMES1.
-         MOVE NOV-TIMES1-FECHA TO CLAVE-NOV-TIMES1-FECHA.
          MOVE NOV-TIMES1-NUMERO TO CLAVE-NOV-TIMES1-NUMERO.
+         MOVE NOV-TIMES1-FECHA TO CLAVE-NOV-TIMES1-FECHA.
          MOVE NOV-TIMES1-SUCURSAL TO CLAVE-NOV-TIMES1-SUCURSAL.
 
       *-----------------------------------------------------------*
@@ -228,17 +231,17 @@
         0300-LEER-NOV-TIMES2.
          READ NOV-TIMES2
             AT END MOVE "SI" TO EOF-NOVTIMES2.
-         MOVE NOV-TIMES2-FECHA TO CLAVE-NOV-TIMES2-FECHA.
          MOVE NOV-TIMES2-NUMERO TO CLAVE-NOV-TIMES2-NUMERO.
+         MOVE NOV-TIMES2-FECHA TO CLAVE-NOV-TIMES2-FECHA.
          MOVE NOV-TIMES2-SUCURSAL TO CLAVE-NOV-TIMES2-SUCURSAL.
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
         0400-LEER-NOV-TIMES3.
          READ NOV-TIMES3
-            AT END MOVE "SI" TO EOF-NOVTIMES3.
-         MOVE NOV-TIMES3-FECHA TO CLAVE-NOV-TIMES3-FECHA.
+            AT END MOVE "SI" TO EOF-NOVTIMES3.      
          MOVE NOV-TIMES3-NUMERO TO CLAVE-NOV-TIMES3-NUMERO.
+         MOVE NOV-TIMES3-FECHA TO CLAVE-NOV-TIMES3-FECHA.
          MOVE NOV-TIMES3-SUCURSAL TO CLAVE-NOV-TIMES3-SUCURSAL.
 
       *-----------------------------------------------------------*
@@ -266,16 +269,86 @@
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
         0900-CARGAR-TIPOS_CLASE.
-         DISPLAY "CARGAR TIPO CLASE".
+         MOVE TIP-TIP_CLASE TO TAB-TIP-TIP_CLASE(SUBINDICE).
+         MOVE TIP-DESC TO TAB-TIP-DESC(SUBINDICE).
+         MOVE TIP-TARIFA TO TAB-TIP-TARIFA(SUBINDICE).
+         ADD 1 TO SUBINDICE.
+         PERFORM 0700-LEER-TIPOS_CLASE.
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
         1000-CARGAR-SUCURSALES.
-         DISPLAY "CARGAR SUCURSALES".
+         MOVE SUC-SUCURSAL TO TAB-SUC-SUCURSAL(SUBINDICE).
+         MOVE SUC-RAZON TO TAB-SUC-RAZON(SUBINDICE).
+         MOVE SUC-DIRE TO TAB-SUC-DIRE(SUBINDICE).
+         MOVE SUC-TEL TO TAB-SUC-TEL(SUBINDICE).
+         MOVE SUC-CUIT TO TAB-SUC-CUIT(SUBINDICE).
+         ADD 1 TO SUBINDICE.
+         PERFORM 0600-LEER-SUCURSALES.
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
-       FIN.
+        1100-PROCESAR-ARCHIVOS.
+         PERFORM 1200-DETERMINAR-MENOR. 
+         MOVE 0 TO HORAS-PROFESOR.
+         MOVE MENOR-CLAVE-NUMERO TO PROFESOR-ANTERIOR.
+         PERFORM 1300-PROCESAR-PROFESOR UNTIL (EOF-NOV-TIMES1
+             AND EOF-NOV-TIMES2 AND EOF-NOV-TIMES3) OR
+             (PROFESOR-ANTERIOR NOT EQUAL MENOR-CLAVE-NUMERO).         
+         PERFORM 0500-LEER-PROFESORES.
+         ADD HORAS-PROFESOR TO HORAS-TOTALES.
+
+      *-----------------------------------------------------------*
+      *-----------------------------------------------------------*
+        1200-DETERMINAR-MENOR.
+         MOVE CLAVE-NOV-TIMES1 TO MENOR-CLAVE.
+         IF CLAVE-NOV-TIMES2 < MENOR-CLAVE THEN
+             MOVE CLAVE-NOV-TIMES2 TO MENOR-CLAVE.
+         IF CLAVE-NOV-TIMES3 < MENOR-CLAVE THEN
+             MOVE CLAVE-NOV-TIMES3 TO MENOR-CLAVE.
+      
+      *-----------------------------------------------------------*
+      *-----------------------------------------------------------*
+         1300-PROCESAR-PROFESOR.
+          MOVE MENOR-CLAVE-FECHA TO FECHA-ANTERIOR.
+          MOVE 0 TO HORAS-FECHA.
+          PERFORM 1400-PROCESAR-FECHA UNTIL (EOF-NOV-TIMES1 AND
+               EOF-NOV-TIMES2 AND EOF-NOV-TIMES3) OR
+               (FECHA-ANTERIOR NOT EQUAL MENOR-CLAVE-FECHA).
+          ADD HORAS-FECHA TO HORAS-PROFESOR. 
+
+      *-----------------------------------------------------------*
+      *-----------------------------------------------------------*
+         1400-PROCESAR-FECHA.
+          PERFORM 1500-PROCESAR-NOV-TIMES1 UNTIL (MENOR-CLAVE 
+              NOT EQUAL CLAVE-NOV-TIMES1) OR EOF-NOV-TIMES1.
+          PERFORM 1600-PROCESAR-NOV-TIMES2 UNTIL (MENOR-CLAVE
+              NOT EQUAL CLAVE-NOV-TIMES2) OR EOF-NOV-TIMES2.
+          PERFORM 1700-PROCESAR-NOV-TIMES3 UNTIL (MENOR-CLAVE
+              NOT EQUAL CLAVE-NOV-TIMES3) OR EOF-NOV-TIMES3.
+          PERFORM 1200-DETERMINAR-MENOR. 
+
+      *-----------------------------------------------------------*
+      *-----------------------------------------------------------*
+         1500-PROCESAR-NOV-TIMES1.
+          ADD NOV-TIMES1-HORAS TO HORAS-FECHA. 
+          PERFORM 0200-LEER-NOV-TIMES1.
+      
+      *-----------------------------------------------------------*
+      *-----------------------------------------------------------*
+         1600-PROCESAR-NOV-TIMES2.
+          ADD NOV-TIMES2-HORAS TO HORAS-FECHA.
+          PERFORM 0300-LEER-NOV-TIMES2.
+
+      *-----------------------------------------------------------*
+      *-----------------------------------------------------------*
+         1700-PROCESAR-NOV-TIMES3.
+          ADD NOV-TIMES3-HORAS TO HORAS-FECHA.
+          PERFORM 0400-LEER-NOV-TIMES3.
+
+      *-----------------------------------------------------------*
+      *-----------------------------------------------------------*
+         1800-FIN.
             CLOSE NOV-TIMES1.
             CLOSE NOV-TIMES2.
             CLOSE NOV-TIMES3.
