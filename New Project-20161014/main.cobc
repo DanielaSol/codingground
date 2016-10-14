@@ -103,7 +103,8 @@
         77 EOF-NOVTIMES3 PIC XX VALUE "NO".
             88 EOF-NOV-TIMES3 VALUE "SI".
             
-            
+        77 EOF-PROF PIC XX VALUE "NO".
+            88 EOF-NOV-TIMES3 VALUE "SI".    
             
             
             
@@ -181,11 +182,11 @@
        *-----------------------------------------------------------*
        *-----------------------------------------------------------*
         LEER-SUCURSALES.
-        READ SUCURSALES AT END MOVE "SI" TO EOF-SUC.
+       * READ SUCURSALES AT END MOVE "SI" TO EOF-SUC.
        *-----------------------------------------------------------*
        *-----------------------------------------------------------*
         LEER-TIPOS_CLASES.
-        READ TIPOS_CLASES AT END MOVE "SI" TO EOF-CLA.
+       *    READ TIPOS_CLASES AT END MOVE "SI" TO EOF-CLA.
        *-----------------------------------------------------------*
        *-----------------------------------------------------------*
         
