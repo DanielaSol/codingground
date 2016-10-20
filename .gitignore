@@ -1,0 +1,3 @@
+# Ignorar archivos binarios de compilacion COBOL
+*.so
+*.*~
