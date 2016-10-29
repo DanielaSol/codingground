@@ -269,6 +269,7 @@
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
         0900-CARGAR-TIPOS_CLASE.
+         DISPLAY SUBINDICE.
          MOVE TIP-TIP_CLASE TO TAB-TIP-TIP_CLASE(SUBINDICE).
          MOVE TIP-DESC TO TAB-TIP-DESC(SUBINDICE).
          MOVE TIP-TARIFA TO TAB-TIP-TARIFA(SUBINDICE).
