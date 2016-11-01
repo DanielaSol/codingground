@@ -197,6 +197,9 @@
           03 FILLER PIC X(41) VALUE SPACES.
           03 FILLER PIC X(5) VALUE 'HOJA '.
           03 HOJA PIC 9(3) VALUE 1.
+          03 FILLER PIC X(21) VALUE SPACES.
+          03 FILLER PIC X(20) VALUE SPACES.
+          03 FILLER PIC X(26) VALUE 'Listado de horas aplicadas'.
        01 LINEA-EN-BLANCO.
           03 FILLER PIC X(80) VALUE SPACES.
        01 MOSTRAR-DATOS-PROFESOR.
@@ -264,6 +267,7 @@
         PERFORM 1100-PROCESAR-ARCHIVOS UNTIL EOF-NOV-TIMES1
         AND EOF-NOV-TIMES2 AND EOF-NOV-TIMES3.
         PERFORM 1800-FIN.        
+        MOVE  IMPORTE-TOTAL TO MOSTRAR-TOTAL-GENERAL.
         STOP RUN.
         
       *----------    PERFORM INICIO      -------------------------*
@@ -324,14 +328,12 @@
       *-----------------------------------------------------------*
         0800-CARGAR-TABLAS.
          PERFORM 0900-CARGAR-TIPOS_CLASE UNTIL EOF-TIPOS_CLASE.
-         DISPLAY "TERMINE".
          MOVE 1 TO SUBINDICE.
          PERFORM 1000-CARGAR-SUCURSALES UNTIL EOF-SUCURSALES.
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
-        0900-CARGAR-TIPOS_CLASE.
-         DISPLAY SUBINDICE.
+        0900-CARGAR-TIPOS_CLASE.       
          MOVE TIP-TIP_CLASE TO TAB-TIP-TIP_CLASE(SUBINDICE).
          MOVE TIP-DESC TO TAB-TIP-DESC(SUBINDICE).
          MOVE TIP-TARIFA TO TAB-TIP-TARIFA(SUBINDICE).
@@ -359,7 +361,7 @@
              AND EOF-NOV-TIMES2 AND EOF-NOV-TIMES3) OR
              (PROFESOR-ANTERIOR NOT EQUAL MENOR-CLAVE-NUMERO).         
          PERFORM 0500-LEER-PROFESORES.
-         ADD HORAS-PROFESOR TO HORAS-TOTALES.
+         ADD HORAS-PROFESOR TO HORAS-TOTALES.        
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
@@ -375,9 +377,16 @@
          1300-PROCESAR-PROFESOR.
           MOVE MENOR-CLAVE-FECHA TO FECHA-ANTERIOR.
           MOVE 0 TO HORAS-FECHA.
+          MOVE PROFESOR-ANTERIOR TO MOSTRAR-NUMERO-PROFESOR.
+          MOVE PROF-NOMBRE TO MOSTRAR-NOMBRE-PROFESOR.
+          WRITE LINEA-LISTADO FROM MOSTRAR-DATOS-PROFESOR.
+          WRITE LINEA-LISTADO FROM LINEA-EN-BLANCO.
+          WRITE LINEA-LISTADO FROM ENCABEZADO-TABLA.
+          WRITE LINEA-LISTADO FROM LINEA-HORIZONTAL.
           PERFORM 1400-PROCESAR-FECHA UNTIL (EOF-NOV-TIMES1 AND
                EOF-NOV-TIMES2 AND EOF-NOV-TIMES3) OR
-               (FECHA-ANTERIOR NOT EQUAL MENOR-CLAVE-FECHA).
+               (FECHA-ANTERIOR NOT EQUAL MENOR-CLAVE-FECHA) OR 
+               (PROFESOR-ANTERIOR NOT EQUAL MENOR-CLAVE-NUMERO).
           ADD HORAS-FECHA TO HORAS-PROFESOR. 
 
       *-----------------------------------------------------------*
@@ -412,6 +421,7 @@
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
          1800-FIN.
+            DISPLAY "PERFORM FIN".
             CLOSE NOV-TIMES1.
             CLOSE NOV-TIMES2.
             CLOSE NOV-TIMES3.
@@ -433,3 +443,4 @@
            WRITE LINEA-LISTADO FROM ENCABEZADO.
            WRITE LINEA-LISTADO FROM LINEA-EN-BLANCO.
            ADD 3 TO LINEA-A-ESCRIBIR.           
+           DISPLAY "FIN LINEA ENCABEZADO".
