@@ -1,15 +1,33 @@
 ________________________________________________________________________________
- 31/10/2016                                         HOJA 001
+ 01/11/2016                                         HOJA 001
 
- PROFESOR: P01        NOMBRE: Juan Gonzalez
-
- FECHA         SUCURSAL    TIPO DE CLASE          TARIFA       HORAS     IMPORTE
-________________________________________________________________________________
- PROFESOR: P01        NOMBRE: Juan Gonzalez
+ PROFESOR: 001        NOMBRE: Juan Gonzalez
 
  FECHA         SUCURSAL    TIPO DE CLASE          TARIFA       HORAS     IMPORTE
 ________________________________________________________________________________
- PROFESOR: P02        NOMBRE: Laura Palavecino
+TOTALES POR PROFESOR:                                         03          00
+ PROFESOR: 002        NOMBRE: Laura Palavecino
 
  FECHA         SUCURSAL    TIPO DE CLASE          TARIFA       HORAS     IMPORTE
 ________________________________________________________________________________
+TOTALES POR PROFESOR:                                         04          00
+ PROFESOR: 003        NOMBRE: Miguel Garcia
+
+ FECHA         SUCURSAL    TIPO DE CLASE          TARIFA       HORAS     IMPORTE
+________________________________________________________________________________
+TOTALES POR PROFESOR:                                         02          00
+ PROFESOR: 004        NOMBRE: Luciana Lopez
+
+ FECHA         SUCURSAL    TIPO DE CLASE          TARIFA       HORAS     IMPORTE
+________________________________________________________________________________
+TOTALES POR PROFESOR:                                         04          00
+ PROFESOR: 005        NOMBRE: Lucas Duarte
+
+ FECHA         SUCURSAL    TIPO DE CLASE          TARIFA       HORAS     IMPORTE
+________________________________________________________________________________
+TOTALES POR PROFESOR:                                         03          00
+ PROFESOR: 006        NOMBRE: Romina Martinez
+
+ FECHA         SUCURSAL    TIPO DE CLASE          TARIFA       HORAS     IMPORTE
+________________________________________________________________________________
+TOTALES POR PROFESOR:                                         02          00

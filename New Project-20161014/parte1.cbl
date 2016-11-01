@@ -354,14 +354,26 @@
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
         1100-PROCESAR-ARCHIVOS.
+         DISPLAY "PROCESAR-ARCHIVOS".
          PERFORM 1200-DETERMINAR-MENOR. 
          MOVE 0 TO HORAS-PROFESOR.
          MOVE MENOR-CLAVE-NUMERO TO PROFESOR-ANTERIOR.
+         MOVE PROFESOR-ANTERIOR TO MOSTRAR-NUMERO-PROFESOR.
+         MOVE PROF-NOMBRE TO MOSTRAR-NOMBRE-PROFESOR.
+         WRITE LINEA-LISTADO FROM MOSTRAR-DATOS-PROFESOR.
+         WRITE LINEA-LISTADO FROM LINEA-EN-BLANCO.
+         WRITE LINEA-LISTADO FROM ENCABEZADO-TABLA.
+         WRITE LINEA-LISTADO FROM LINEA-HORIZONTAL.
+         ADD 4 TO LINEA-A-ESCRIBIR.         
          PERFORM 1300-PROCESAR-PROFESOR UNTIL (EOF-NOV-TIMES1
              AND EOF-NOV-TIMES2 AND EOF-NOV-TIMES3) OR
              (PROFESOR-ANTERIOR NOT EQUAL MENOR-CLAVE-NUMERO).         
          PERFORM 0500-LEER-PROFESORES.
          ADD HORAS-PROFESOR TO HORAS-TOTALES.        
+         DISPLAY "FIN PROCESAR PROFESOR".
+         MOVE HORAS-PROFESOR TO MOSTRAR-TOTAL-HORAS-PROFESOR.
+         MOVE 0 TO MOSTRAR-TOTAL-IMPORTE-PROFESOR.
+         WRITE LINEA-LISTADO FROM LINEA-TOTAL-PROFESOR.
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
@@ -376,17 +388,12 @@
       *-----------------------------------------------------------*
          1300-PROCESAR-PROFESOR.
           MOVE MENOR-CLAVE-FECHA TO FECHA-ANTERIOR.
-          MOVE 0 TO HORAS-FECHA.
-          MOVE PROFESOR-ANTERIOR TO MOSTRAR-NUMERO-PROFESOR.
-          MOVE PROF-NOMBRE TO MOSTRAR-NOMBRE-PROFESOR.
-          WRITE LINEA-LISTADO FROM MOSTRAR-DATOS-PROFESOR.
-          WRITE LINEA-LISTADO FROM LINEA-EN-BLANCO.
-          WRITE LINEA-LISTADO FROM ENCABEZADO-TABLA.
-          WRITE LINEA-LISTADO FROM LINEA-HORIZONTAL.
+          MOVE 0 TO HORAS-FECHA.         
           PERFORM 1400-PROCESAR-FECHA UNTIL (EOF-NOV-TIMES1 AND
                EOF-NOV-TIMES2 AND EOF-NOV-TIMES3) OR
                (FECHA-ANTERIOR NOT EQUAL MENOR-CLAVE-FECHA) OR 
                (PROFESOR-ANTERIOR NOT EQUAL MENOR-CLAVE-NUMERO).
+          DISPLAY "SALI DE PROCESAR FECHA".
           ADD HORAS-FECHA TO HORAS-PROFESOR. 
 
       *-----------------------------------------------------------*
@@ -398,23 +405,32 @@
               NOT EQUAL CLAVE-NOV-TIMES2) OR EOF-NOV-TIMES2.
           PERFORM 1700-PROCESAR-NOV-TIMES3 UNTIL (MENOR-CLAVE
               NOT EQUAL CLAVE-NOV-TIMES3) OR EOF-NOV-TIMES3.
+          IF EOF-NOV-TIMES1 THEN
+              MOVE 9999999999999999 TO CLAVE-NOV-TIMES1.
+          IF EOF-NOV-TIMES2 THEN
+              MOVE 9999999999999999 TO CLAVE-NOV-TIMES2.
+          IF EOF-NOV-TIMES3 THEN
+              MOVE 9999999999999999 TO CLAVE-NOV-TIMES3.
           PERFORM 1200-DETERMINAR-MENOR. 
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
          1500-PROCESAR-NOV-TIMES1.
+          DISPLAY "ENTRE A NOV TIMES1".
           ADD NOV-TIMES1-HORAS TO HORAS-FECHA. 
           PERFORM 0200-LEER-NOV-TIMES1.
       
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
          1600-PROCESAR-NOV-TIMES2.
+          DISPLAY "ENTRE A NOV TIMES2".
           ADD NOV-TIMES2-HORAS TO HORAS-FECHA.
           PERFORM 0300-LEER-NOV-TIMES2.
 
       *-----------------------------------------------------------*
       *-----------------------------------------------------------*
          1700-PROCESAR-NOV-TIMES3.
+          DISPLAY "ENTRE A NOV TIMES3".
           ADD NOV-TIMES3-HORAS TO HORAS-FECHA.
           PERFORM 0400-LEER-NOV-TIMES3.
 
