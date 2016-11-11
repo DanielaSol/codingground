@@ -44,6 +44,17 @@
         FD LISTADO     LABEL RECORD OMITTED.
         01 LINEA-LISTADO PIC X(87).
         
+        FD MAE-TIMES     LABEL RECORD OMITTED.
+        01 REG-MAE-TIMES.
+            03 MAE-TIMES-NUMERO       PIC X(5).
+            03 MAE-TIMES-FECHA.
+                05 MAE-TIMES-ANIO     PIC 9(4).
+                05 MAE-TIMES-MES      PIC 9(2).
+                05 MAE-TIMES-DIA      PIC 9(2).
+            03 MAE-TIMES-SUCURSAL     PIC X(3).
+            03 MAE-TIMES-TIPO-CLASE   PIC X(4).
+            03 MAE-TIMES-HORAS        PIC 9(2)V99.
+
              
         FD NOV-TIMES1     LABEL RECORD IS STANDARD
                          VALUE OF FILE-ID IS "NovTimes1.dat".
@@ -444,7 +455,8 @@
           MOVE IMPORTE TO MOSTRAR-IMPORTE.
           WRITE LINEA-LISTADO FROM DATOS-TABLA.
           ADD 1 TO LINEA-A-ESCRIBIR.
-          ADD IMPORTE TO IMPORTE-FECHA.               
+          ADD IMPORTE TO IMPORTE-FECHA.    
+          WRITE REG-MAE-TIMES FROM REG-NOV-TIMES1.           
           PERFORM 0200-LEER-NOV-TIMES1.
       
       *-----------------------------------------------------------*
@@ -469,6 +481,7 @@
           WRITE LINEA-LISTADO FROM DATOS-TABLA.
           ADD 1 TO LINEA-A-ESCRIBIR.
           ADD IMPORTE TO IMPORTE-FECHA.
+          WRITE REG-MAE-TIMES FROM REG-NOV-TIMES2.
           PERFORM 0300-LEER-NOV-TIMES2.
 
       *-----------------------------------------------------------*
@@ -493,6 +506,7 @@
           WRITE LINEA-LISTADO FROM DATOS-TABLA.
           ADD 1 TO LINEA-A-ESCRIBIR.
           ADD IMPORTE TO IMPORTE-FECHA.
+          WRITE REG-MAE-TIMES FROM REG-NOV-TIMES3.
           PERFORM 0400-LEER-NOV-TIMES3.
 
       *-----------------------------------------------------------*
